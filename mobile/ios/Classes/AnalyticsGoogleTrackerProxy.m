@@ -6,7 +6,6 @@
  */
 
 #import "AnalyticsGoogleTrackerProxy.h"
-#import "AnalyticsGoogleTransactionProxy.h"
 
 
 @implementation AnalyticsGoogleTrackerProxy
@@ -19,7 +18,7 @@
         {
             TiThreadPerformOnMainThread(^{
                 tracker = [[GAI sharedInstance] defaultTracker];
-                trackingId = [tracker trackingId];
+//                trackingId = [tracker trackingId];
             }, NO);
         }
     }
@@ -50,6 +49,27 @@
 
 #pragma mark Public APIs
 
+// https://developers.google.com/analytics/devguides/collection/ios/v3/user-id
+-(void)setUser:(id)args
+{
+    NSString *userId;
+    NSString *category;
+    NSString *action;
+
+    ENSURE_ARG_FOR_KEY(userId, args, @"userId", NSString);
+    ENSURE_ARG_FOR_KEY(category, args, @"category", NSString);
+    ENSURE_ARG_FOR_KEY(action, args, @"action", NSString);
+
+    [tracker set:@"&uid"
+           value:userId];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:category
+                                                          action:action
+                                                           label:nil
+                                                           value:nil] build]];
+}
+
+
+// https://developers.google.com/analytics/devguides/collection/ios/v3/events
 -(void)trackEvent:(id)args
 {
     ENSURE_UI_THREAD_1_ARG(args);
@@ -65,12 +85,14 @@
     ENSURE_ARG_OR_NIL_FOR_KEY(label, args, @"label", NSString);
     ENSURE_ARG_OR_NIL_FOR_KEY(value, args, @"value", NSNumber);
 
-    [tracker sendEventWithCategory:category
-                         withAction:action
-                          withLabel:label
-                          withValue:value];
+
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:category
+                                                        action:action
+                                                        label:label
+                                                        value:value] build]];
 }
 
+// https://developers.google.com/analytics/devguides/collection/ios/v3/social
 -(void)trackSocial:(id)args
 {
     ENSURE_UI_THREAD_1_ARG(args);
@@ -84,11 +106,14 @@
     ENSURE_ARG_FOR_KEY(action, args, @"action", NSString);
     ENSURE_ARG_OR_NIL_FOR_KEY(target, args, @"target", NSString);
 
-    [tracker sendSocial:network
-              withAction:action
-              withTarget:target];
+    [tracker send:[[GAIDictionaryBuilder createSocialWithNetwork:network
+                                                         action:action
+                                                         target:target] build]];
+
+
 }
 
+// https://developers.google.com/analytics/devguides/collection/ios/v3/usertimings
 -(void)trackTiming:(id)args
 {
     ENSURE_UI_THREAD_1_ARG(args);
@@ -104,77 +129,135 @@
     ENSURE_ARG_OR_NIL_FOR_KEY(label, args, @"label", NSString);
     ENSURE_ARG_FOR_KEY(time, args, @"time", NSNumber);
 
-    [tracker sendTimingWithCategory:category
-                           withValue:[time doubleValue]
-                            withName:name
-                           withLabel:label];
+    [tracker send:[[GAIDictionaryBuilder createTimingWithCategory:category
+                                                         interval:time
+                                                             name:name
+                                                            label:label] build]];
 }
 
+// https://developers.google.com/analytics/devguides/collection/ios/v3/screens
 -(void)trackScreen:(id)value
 {
     ENSURE_UI_THREAD_1_ARG(value);
     ENSURE_SINGLE_ARG(value, NSString);
 
-    [tracker sendView:value];
+    // This screen name value will remain set on the tracker and sent with
+    // hits until it is set to a new value or to nil.
+    [tracker set:kGAIScreenName value:value];
+
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
--(void)trackTransaction:(id)value
+// https://developers.google.com/analytics/devguides/collection/ios/v3/ecommerce
+-(void)trackTransaction:(id)args
 {
-    ENSURE_UI_THREAD_1_ARG(value);
-    ENSURE_SINGLE_ARG(value, AnalyticsGoogleTransactionProxy);
 
-    AnalyticsGoogleTransactionProxy *proxy = (AnalyticsGoogleTransactionProxy*)value;
-    [tracker sendTransaction: [proxy transaction]];
-}
-
--(void)send:(id)args
-{
     ENSURE_UI_THREAD_1_ARG(args);
     ENSURE_SINGLE_ARG(args, NSDictionary);
 
-    NSString *trackType;
-    NSDictionary *parameters;
+    NSString *transactionId;
+    NSString *affiliation;
+    NSNumber *revenue;
+    NSNumber *tax;
+    NSNumber *shipping;
+    NSString *currency;
 
-    ENSURE_ARG_FOR_KEY(trackType, args, @"trackType", NSString);
-    ENSURE_ARG_FOR_KEY(parameters, args, @"parameters", NSDictionary);
+    ENSURE_ARG_FOR_KEY(transactionId, args, @"transactionId", NSString);
+    ENSURE_ARG_FOR_KEY(affiliation, args, @"affiliation", NSString);
+    ENSURE_ARG_FOR_KEY(revenue, args, @"revenue", NSNumber);
+    ENSURE_ARG_FOR_KEY(tax, args, @"tax", NSNumber);
+    ENSURE_ARG_FOR_KEY(shipping, args, @"shipping", NSNumber);
+    ENSURE_ARG_FOR_KEY(currency, args, @"currency", NSString);
 
-    [tracker send:trackType params:parameters];
+    [tracker send:[[GAIDictionaryBuilder createTransactionWithId:transactionId
+                                                     affiliation:affiliation
+                                                         revenue:revenue
+                                                             tax:tax
+                                                        shipping:shipping
+                                                    currencyCode:currency] build]];
 }
 
--(void)close
+// https://developers.google.com/analytics/devguides/collection/ios/v3/ecommerce
+-(void)trackTransactionItem:(id)args
 {
-    ENSURE_UI_THREAD_0_ARGS;
-    [tracker close];
+
+    ENSURE_UI_THREAD_1_ARG(args);
+    ENSURE_SINGLE_ARG(args, NSDictionary);
+
+    NSString *transactionId;
+    NSString *name;
+    NSString *sku;
+    NSString *category;
+    NSNumber *price;
+    NSNumber *quantity;
+    NSString *currency;
+
+    ENSURE_ARG_FOR_KEY(transactionId, args, @"transactionId", NSString);
+    ENSURE_ARG_FOR_KEY(name, args, @"name", NSString);
+    ENSURE_ARG_FOR_KEY(sku, args, @"sku", NSString);
+    ENSURE_ARG_OR_NIL_FOR_KEY(category, args, @"category", NSString);
+    ENSURE_ARG_FOR_KEY(price, args, @"price", NSNumber);
+    ENSURE_ARG_FOR_KEY(quantity, args, @"quantity", NSNumber);
+    ENSURE_ARG_FOR_KEY(currency, args, @"currency", NSString);
+
+    [tracker send:[[GAIDictionaryBuilder createItemWithTransactionId:transactionId
+                                                                name:name
+                                                                 sku:sku
+                                                            category:category
+                                                               price:price
+                                                            quantity:quantity
+                                                        currencyCode:currency] build]];
 }
+
+//// https://developers.google.com/analytics/devguides/collection/ios/v3/advanced
+//-(void)send:(id)args
+//{
+//    ENSURE_UI_THREAD_1_ARG(args);
+//    ENSURE_SINGLE_ARG(args, NSDictionary);
+//
+//    NSString *trackType;
+//    NSDictionary *parameters;
+//
+//    ENSURE_ARG_FOR_KEY(trackType, args, @"trackType", NSString);
+//    ENSURE_ARG_FOR_KEY(parameters, args, @"parameters", NSDictionary);
+//
+//    [tracker send:trackType params:parameters];
+//}
+//
+//-(void)close
+//{
+//    ENSURE_UI_THREAD_0_ARGS;
+//    [tracker close];
+//}
 
 -(id)trackingId
 {
     return trackingId;
 }
 
--(void)setAnonymize:(id)value
-{
-    ENSURE_UI_THREAD_1_ARG(value);
-    ENSURE_SINGLE_ARG(value, NSNumber);
-
-    tracker.anonymize = [value boolValue];
-}
-
--(void)setUseHttps:(id)value
-{
-    ENSURE_UI_THREAD_1_ARG(value);
-    ENSURE_SINGLE_ARG(value, NSNumber);
-
-    tracker.useHttps = [value boolValue];
-}
-
--(void)setSampleRate:(id)value
-{
-    ENSURE_UI_THREAD_1_ARG(value);
-    ENSURE_SINGLE_ARG(value, NSNumber);
-
-    tracker.sampleRate = [value doubleValue];
-}
+//-(void)setAnonymize:(id)value
+//{
+//    ENSURE_UI_THREAD_1_ARG(value);
+//    ENSURE_SINGLE_ARG(value, NSNumber);
+//
+//    tracker.anonymize = [value boolValue];
+//}
+//
+//-(void)setUseHttps:(id)value
+//{
+//    ENSURE_UI_THREAD_1_ARG(value);
+//    ENSURE_SINGLE_ARG(value, NSNumber);
+//
+//    tracker.useHttps = [value boolValue];
+//}
+//
+//-(void)setSampleRate:(id)value
+//{
+//    ENSURE_UI_THREAD_1_ARG(value);
+//    ENSURE_SINGLE_ARG(value, NSNumber);
+//
+//    tracker.sampleRate = [value doubleValue];
+//}
 
 -(id<GAITracker>)tracker
 {

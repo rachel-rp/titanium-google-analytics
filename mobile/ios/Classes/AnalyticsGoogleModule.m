@@ -5,7 +5,6 @@
  * and licensed under the Apache Public License (version 2)
  */
 #import "AnalyticsGoogleModule.h"
-#import "AnalyticsGoogleTransactionProxy.h"
 #import "AnalyticsGoogleTrackerProxy.h"
 #import "TiBase.h"
 #import "TiHost.h"
@@ -38,7 +37,7 @@
     {
         TiThreadPerformOnMainThread(^{
             optOut = [[GAI sharedInstance] optOut];
-            debug = [[GAI sharedInstance] debug];
+            debug = [[GAI sharedInstance] dryRun];
             dispatchInterval = [[GAI sharedInstance] dispatchInterval];
         }, NO);
     }
@@ -83,12 +82,6 @@
 	return [[[AnalyticsGoogleTrackerProxy alloc] initWithTrackingId:trackingId] autorelease];
 }
 
--(id)makeTransaction:(id)args
-{
-    ENSURE_SINGLE_ARG(args, NSDictionary);
-    return [[[AnalyticsGoogleTransactionProxy alloc] initWithArgs:args] autorelease];
-}
-
 -(id)optOut
 {
     return [NSNumber numberWithBool:optOut];
@@ -98,7 +91,8 @@
 {
     ENSURE_UI_THREAD_1_ARG(value);
     ENSURE_TYPE(value, NSNumber);
-    [GAI sharedInstance].optOut = optOut = [TiUtils boolValue:value];
+    optOut = [TiUtils boolValue:value];
+    [[GAI sharedInstance] setOptOut:optOut];
 }
 
 -(id)defaultTracker
@@ -115,7 +109,8 @@
 {
     ENSURE_UI_THREAD_1_ARG(value);
     ENSURE_TYPE(value, NSNumber);
-    [GAI sharedInstance].debug = debug = [TiUtils boolValue:value];
+    debug = [TiUtils boolValue:value];
+    [[GAI sharedInstance] setDryRun:debug];
 }
 
 -(id)dispatchInterval
