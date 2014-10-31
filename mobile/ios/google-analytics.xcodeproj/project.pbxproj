@@ -36,10 +36,11 @@
 		279CB4061A03D38300ADA980 /* GAILogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 279CB3AB1A03D38300ADA980 /* GAILogger.h */; };
 		279CB4071A03D38300ADA980 /* GAITrackedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 279CB3AC1A03D38300ADA980 /* GAITrackedViewController.h */; };
 		279CB4081A03D38300ADA980 /* GAITracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 279CB3AD1A03D38300ADA980 /* GAITracker.h */; };
-		279CB4201A03D38300ADA980 /* libAdIdAccess.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 279CB3F01A03D38300ADA980 /* libAdIdAccess.a */; };
 		279CB4211A03D38300ADA980 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 279CB3F11A03D38300ADA980 /* libGoogleAnalyticsServices.a */; };
 		279CB4291A03D3C400ADA980 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279CB4281A03D3C400ADA980 /* CoreData.framework */; };
 		279CB42B1A03D3CE00ADA980 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 279CB42A1A03D3CE00ADA980 /* libz.dylib */; };
+		279CB48A1A040CB200ADA980 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279CB4891A040CB200ADA980 /* SystemConfiguration.framework */; };
+		279CB48D1A040D7B00ADA980 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 279CB48C1A040D7B00ADA980 /* libsqlite3.0.dylib */; };
 		2A54E9F816446CF10011E04D /* AnalyticsGoogleTrackerProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A54E9F616446CF10011E04D /* AnalyticsGoogleTrackerProxy.h */; };
 		2A54E9F916446CF10011E04D /* AnalyticsGoogleTrackerProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A54E9F716446CF10011E04D /* AnalyticsGoogleTrackerProxy.m */; };
 		AA747D9F0F9514B9006C5449 /* AnalyticsGoogle_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* AnalyticsGoogle_Prefix.pch */; };
@@ -79,6 +80,9 @@
 		279CB3F21A03D38300ADA980 /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
 		279CB4281A03D3C400ADA980 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		279CB42A1A03D3CE00ADA980 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		279CB4871A040BE800ADA980 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		279CB4891A040CB200ADA980 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		279CB48C1A040D7B00ADA980 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		2A54E9F616446CF10011E04D /* AnalyticsGoogleTrackerProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsGoogleTrackerProxy.h; path = Classes/AnalyticsGoogleTrackerProxy.h; sourceTree = "<group>"; };
 		2A54E9F716446CF10011E04D /* AnalyticsGoogleTrackerProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsGoogleTrackerProxy.m; path = Classes/AnalyticsGoogleTrackerProxy.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* AnalyticsGoogle_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsGoogle_Prefix.pch; sourceTree = SOURCE_ROOT; };
@@ -91,10 +95,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				279CB48D1A040D7B00ADA980 /* libsqlite3.0.dylib in Frameworks */,
+				279CB48A1A040CB200ADA980 /* SystemConfiguration.framework in Frameworks */,
 				279CB42B1A03D3CE00ADA980 /* libz.dylib in Frameworks */,
 				279CB4291A03D3C400ADA980 /* CoreData.framework in Frameworks */,
 				AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */,
-				279CB4201A03D38300ADA980 /* libAdIdAccess.a in Frameworks */,
 				279CB4211A03D38300ADA980 /* libGoogleAnalyticsServices.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -124,6 +129,9 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				279CB48C1A040D7B00ADA980 /* libsqlite3.0.dylib */,
+				279CB4891A040CB200ADA980 /* SystemConfiguration.framework */,
+				279CB4871A040BE800ADA980 /* AdSupport.framework */,
 				279CB42A1A03D3CE00ADA980 /* libz.dylib */,
 				279CB4281A03D3C400ADA980 /* CoreData.framework */,
 				AACBBE490F95108600F1A2B1 /* Foundation.framework */,

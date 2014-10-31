@@ -12,3 +12,6 @@ build.properties
 
 Thumbs.db
 .DS_Store
+
+# Test app
+test/

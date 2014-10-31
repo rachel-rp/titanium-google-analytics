@@ -149,7 +149,7 @@
 
     NSString *screenName;
 
-    ENSURE_ARG_FOR_KEY(screenName, args, @"screeName", NSString);
+    ENSURE_ARG_FOR_KEY(screenName, args, @"screenName", NSString);
 
     // This screen name value will remain set on the tracker and sent with
     // hits until it is set to a new value or to nil.
@@ -243,35 +243,28 @@
 // Common way to deal with adding customDimension and customMetric fields
 -(void) handleCustomFields:(GAIDictionaryBuilder*) builder jshash:(id)args
 {
+    NSString *key;
+    NSString *val;
+    NSNumber *metricVal;
     NSDictionary *customDimension;
+    NSDictionary *customMetric;
+
+
     ENSURE_ARG_OR_NIL_FOR_KEY(customDimension, args, @"customDimension", NSDictionary);
     if ([customDimension count]) {
-        NSString *key;
-        NSString *val;
-        NSNumber *idx;
         for(key in customDimension) {
             val = [customDimension objectForKey: key];
             ENSURE_TYPE(val, NSString);
-            idx = [key integerValue];
-            if (idx > 0) {
-                [builder setValue:val forKey:[GAIFields customDimensionForIndex:idx]];
-            }
+            [builder set:val forKey:[GAIFields customDimensionForIndex:[key integerValue]]];
         }
     }
 
-    NSDictionary *customMetric;
     ENSURE_ARG_OR_NIL_FOR_KEY(customMetric, args, @"customMetric", NSDictionary);
     if ([customMetric count]) {
-        NSString *key;
-        NSString *val;
-        NSNumber *idx;
         for(key in customMetric) {
-            val = [customMetric objectForKey: key];
-            ENSURE_TYPE(val, NSString);
-            idx = [key integerValue];
-            if (idx > 0) {
-                [builder setValue:val forKey:[GAIFields customMetricForIndex:idx]];
-            }
+            metricVal = [customMetric objectForKey: key];
+            ENSURE_TYPE(metricVal, NSNumber);
+            [builder set:[metricVal stringValue] forKey:[GAIFields customMetricForIndex:[key integerValue]]];
         }
     }
 
