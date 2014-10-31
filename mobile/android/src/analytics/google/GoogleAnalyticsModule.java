@@ -8,21 +8,14 @@
  */
 package analytics.google;
 
+import org.appcelerator.kroll.KrollModule;
+import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.TiConfig;
+import org.appcelerator.titanium.TiApplication;
+
 import android.app.Activity;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
-
-import org.appcelerator.kroll.KrollDict;
-import org.appcelerator.kroll.KrollModule;
-import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.kroll.common.Log;
-import org.appcelerator.kroll.common.TiConfig;
-
-import org.appcelerator.titanium.TiApplication;
-import org.appcelerator.titanium.util.TiConvert;
-
-import java.util.HashMap;
 
 @Kroll.module(name="GoogleAnalytics", id="analytics.google")
 public class GoogleAnalyticsModule extends KrollModule
@@ -32,7 +25,7 @@ public class GoogleAnalyticsModule extends KrollModule
 	private static final String LCAT = "GoogleAnalyticsModule";
 	private static final boolean DBG = TiConfig.LOGD;
 
-	private GoogleAnalytics mInstance;
+	private final GoogleAnalytics mInstance;
 
 	// You can define constants with @Kroll.constant, for example:
 	// @Kroll.constant public static final String EXTERNAL_NAME = value;
@@ -40,7 +33,7 @@ public class GoogleAnalyticsModule extends KrollModule
 	public GoogleAnalyticsModule()
 	{
 		super();
-		
+
 		TiApplication appContext = TiApplication.getInstance();
 		Activity activity = appContext.getCurrentActivity();
 		mInstance = GoogleAnalytics.getInstance(activity);
@@ -49,7 +42,7 @@ public class GoogleAnalyticsModule extends KrollModule
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app)
 	{
-		
+
 	}
 
 	// Methods
@@ -60,7 +53,7 @@ public class GoogleAnalyticsModule extends KrollModule
 	}
 
 	@Kroll.setProperty
-	public void setLocalDispatchPeriod(int interval)
+	public void setDispatchInterval(int interval)
 	{
 		mInstance.setLocalDispatchPeriod(interval);
 	}
@@ -76,5 +69,12 @@ public class GoogleAnalyticsModule extends KrollModule
 	{
 		mInstance.setDryRun(debug);
 	}
+
+	@Kroll.setProperty
+	public void setTrackUncaughtExceptions(boolean track) {
+		// do nothing - ios only, but this is here so platform handling
+		// is not necessary
+	}
+
 }
 

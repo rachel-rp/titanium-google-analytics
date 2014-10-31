@@ -37,7 +37,7 @@
     {
         TiThreadPerformOnMainThread(^{
             optOut = [[GAI sharedInstance] optOut];
-            debug = [[GAI sharedInstance] dryRun];
+            dryRun = [[GAI sharedInstance] dryRun];
             dispatchInterval = [[GAI sharedInstance] dispatchInterval];
         }, NO);
     }
@@ -82,6 +82,11 @@
 	return [[[AnalyticsGoogleTrackerProxy alloc] initWithTrackingId:trackingId] autorelease];
 }
 
+-(id)defaultTracker
+{
+    return [[AnalyticsGoogleTrackerProxy alloc] initWithDefault];
+}
+
 -(id)optOut
 {
     return [NSNumber numberWithBool:optOut];
@@ -95,22 +100,17 @@
     [[GAI sharedInstance] setOptOut:optOut];
 }
 
--(id)defaultTracker
+-(id)dryRun
 {
-    return [[AnalyticsGoogleTrackerProxy alloc] initWithDefault];
+    return [NSNumber numberWithBool:dryRun];
 }
 
--(id)debug
-{
-    return [NSNumber numberWithBool:debug];
-}
-
--(void)setDebug:(id)value
+-(void)setDryRun:(id)value
 {
     ENSURE_UI_THREAD_1_ARG(value);
     ENSURE_TYPE(value, NSNumber);
-    debug = [TiUtils boolValue:value];
-    [[GAI sharedInstance] setDryRun:debug];
+    dryRun = [TiUtils boolValue:value];
+    [[GAI sharedInstance] setDryRun:dryRun];
 }
 
 -(id)dispatchInterval

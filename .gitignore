@@ -5,6 +5,8 @@ libs
 dist
 *.zip
 
+.classpath
+
 xcuserdata
 build.properties
 

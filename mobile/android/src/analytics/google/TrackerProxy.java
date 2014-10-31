@@ -8,21 +8,16 @@
  */
 package analytics.google;
 
-import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.analytics.HitBuilders;
+import java.util.HashMap;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.titanium.TiC;
-import org.appcelerator.titanium.util.Log;
 import org.appcelerator.titanium.util.TiConfig;
 import org.appcelerator.titanium.util.TiConvert;
-import org.appcelerator.titanium.view.TiCompositeLayout;
-import org.appcelerator.titanium.view.TiCompositeLayout.LayoutArrangement;
 
-import java.util.HashMap;
-import java.lang.Long;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 // This proxy can be created by calling GoogleAnalytics.createExample({message: "hello world"})
 @Kroll.proxy(creatableInModule=GoogleAnalyticsModule.class)
@@ -32,7 +27,7 @@ public class TrackerProxy extends KrollProxy
 	private static final String LCAT = "TrackerProxy";
 	private static final boolean DBG = TiConfig.LOGD;
 
-	private Tracker tracker;
+	private final Tracker tracker;
 
 	// Constructor
 	public TrackerProxy(Tracker t)
@@ -41,12 +36,55 @@ public class TrackerProxy extends KrollProxy
 		tracker = t;
 	}
 
+
+	// https://developers.google.com/analytics/devguides/collection/android/v4/user-id
 	@Kroll.method
-	public void setScreenName(String path)
+	public void setUser(HashMap props)
 	{
-		tracker.setScreenName(path);
+		KrollDict propsDict = new KrollDict(props);
+		String category = TiConvert.toString(propsDict, "category");
+		String action = TiConvert.toString(propsDict, "action");
+		String userId = TiConvert.toString(propsDict, "userId");
+
+		tracker.set("&uid", userId);
+
+		// TODO: https://productforums.google.com/forum/#!topic/analytics/278xuhDXv0s
+		HitBuilders.EventBuilder hitBuilder = new HitBuilders.EventBuilder()
+				.setCategory(category).setAction(action);
+
+		// custom dimension
+		Object cd = propsDict.get("customDimension");
+		if (cd instanceof HashMap) {
+			HashMap dict = (HashMap) cd;
+			for (Object key : dict.keySet()) {
+				int idx = TiConvert.toInt(key);
+				String val = TiConvert.toString(dict.get(key));
+
+				if (idx > 0) {
+					hitBuilder.setCustomDimension(idx, val);
+				}
+			}
+		}
+
+		// custom metric
+		Object cm = propsDict.get("customMetric");
+		if (cm instanceof HashMap) {
+			HashMap dict = (HashMap) cm;
+
+			for (Object key : dict.keySet()) {
+				int idx = TiConvert.toInt(key);
+				float val = TiConvert.toFloat(dict.get(key));
+
+				if (idx > 0) {
+					hitBuilder.setCustomMetric(idx, val);
+				}
+			}
+		}
+
+		tracker.send(hitBuilder.build());
 	}
 
+	// https://developers.google.com/analytics/devguides/collection/ios/v3/events
 	@Kroll.method
 	public void trackEvent(HashMap props)
 	{
@@ -55,14 +93,15 @@ public class TrackerProxy extends KrollProxy
 		String action = TiConvert.toString(propsDict, "action");
 		String label = TiConvert.toString(propsDict, "label");
 		long value = TiConvert.toInt(propsDict, "value");
-		
+
+		// TODO: https://productforums.google.com/forum/#!topic/analytics/278xuhDXv0s
 		HitBuilders.EventBuilder hitBuilder = new HitBuilders.EventBuilder()
 			.setCategory(category)
 			.setAction(action)
 			.setLabel(label)
 			.setValue(value);
-		
-		
+
+
 		// custom dimension
 		Object cd = propsDict.get("customDimension");
 		if (cd instanceof HashMap) {
@@ -70,41 +109,45 @@ public class TrackerProxy extends KrollProxy
 			for (Object key : dict.keySet()) {
 				int idx = TiConvert.toInt(key);
 				String val = TiConvert.toString(dict.get(key));
-				
+
 				if (idx > 0) {
 					hitBuilder.setCustomDimension(idx, val);
 				}
 			}
 		}
-		
+
 		// custom metric
 		Object cm = propsDict.get("customMetric");
 		if (cm instanceof HashMap) {
 			HashMap dict = (HashMap) cm;
-			
+
 			for (Object key : dict.keySet()) {
 				int idx = TiConvert.toInt(key);
 				float val = TiConvert.toFloat(dict.get(key));
-				
+
 				if (idx > 0) {
 					hitBuilder.setCustomMetric(idx, val);
 				}
 			}
 		}
-		
+
 		tracker.send(hitBuilder.build());
 	}
 
+	// https://developers.google.com/analytics/devguides/collection/android/v4/social
 	@Kroll.method
-	public void trackScreen(HashMap props)
+	public void trackSocial(HashMap props)
 	{
 		KrollDict propsDict = new KrollDict(props);
-		String path = TiConvert.toString(propsDict, "path");
-		
-		tracker.setScreenName(path);
-		
-		HitBuilders.AppViewBuilder hitBuilder = new HitBuilders.AppViewBuilder();
-		
+		String network = TiConvert.toString(propsDict, "network");
+		String action = TiConvert.toString(propsDict, "action");
+		String target = TiConvert.toString(propsDict, "target");
+
+
+		// TODO: https://productforums.google.com/forum/#!topic/analytics/278xuhDXv0s
+		HitBuilders.SocialBuilder hitBuilder = new HitBuilders.SocialBuilder()
+				.setNetwork(network).setAction(action).setTarget(target);
+
 		// custom dimension
 		Object cd = propsDict.get("customDimension");
 		if (cd instanceof HashMap) {
@@ -112,31 +155,32 @@ public class TrackerProxy extends KrollProxy
 			for (Object key : dict.keySet()) {
 				int idx = TiConvert.toInt(key);
 				String val = TiConvert.toString(dict.get(key));
-			
+
 				if (idx > 0) {
 					hitBuilder.setCustomDimension(idx, val);
 				}
 			}
 		}
-				
+
 		// custom metric
 		Object cm = propsDict.get("customMetric");
 		if (cm instanceof HashMap) {
 			HashMap dict = (HashMap) cm;
-		
+
 			for (Object key : dict.keySet()) {
 				int idx = TiConvert.toInt(key);
 				float val = TiConvert.toFloat(dict.get(key));
-			
+
 				if (idx > 0) {
 					hitBuilder.setCustomMetric(idx, val);
 				}
 			}
 		}
-		
+
 		tracker.send(hitBuilder.build());
 	}
 
+	// https://developers.google.com/analytics/devguides/collection/android/v4/usertimings
 	@Kroll.method
 	public void trackTiming(HashMap props)
 	{
@@ -145,15 +189,14 @@ public class TrackerProxy extends KrollProxy
 		String name = TiConvert.toString(propsDict, "name");
 		String label = TiConvert.toString(propsDict, "label");
 		long interval = TiConvert.toInt(propsDict, "time");
-		
-		
+
+		// TODO:
+		// https://productforums.google.com/forum/#!topic/analytics/278xuhDXv0s
 		HitBuilders.TimingBuilder hitBuilder = new HitBuilders.TimingBuilder()
-			.setCategory(category)
-			.setValue(interval)
-			.setVariable(name)
-			.setLabel(label);
-		
-		
+				.setCategory(category).setValue(interval).setVariable(name)
+				.setLabel(label);
+
+
 		// custom dimension
 		Object cd = propsDict.get("customDimension");
 		if (cd instanceof HashMap) {
@@ -161,46 +204,43 @@ public class TrackerProxy extends KrollProxy
 			for (Object key : dict.keySet()) {
 				int idx = TiConvert.toInt(key);
 				String val = TiConvert.toString(dict.get(key));
-				
+
 				if (idx > 0) {
 					hitBuilder.setCustomDimension(idx, val);
 				}
 			}
 		}
-		
+
 		// custom metric
 		Object cm = propsDict.get("customMetric");
 		if (cm instanceof HashMap) {
 			HashMap dict = (HashMap) cm;
-			
+
 			for (Object key : dict.keySet()) {
 				int idx = TiConvert.toInt(key);
 				float val = TiConvert.toFloat(dict.get(key));
-				
+
 				if (idx > 0) {
 					hitBuilder.setCustomMetric(idx, val);
 				}
 			}
 		}
-		
+
 		tracker.send(hitBuilder.build());
 	}
 
+	// https://developers.google.com/analytics/devguides/collection/android/v4/screens
 	@Kroll.method
-	public void trackSocial(HashMap props)
+	public void trackScreen(HashMap props)
 	{
 		KrollDict propsDict = new KrollDict(props);
-		String network = TiConvert.toString(propsDict, "network");
-		String action = TiConvert.toString(propsDict, "action");
-		String target = TiConvert.toString(propsDict, "target");
-		
-		
-		HitBuilders.SocialBuilder hitBuilder = new HitBuilders.SocialBuilder()
-			.setNetwork(network)
-			.setAction(action)
-			.setTarget(target);
-		
-		
+		String screenName = TiConvert.toString(propsDict, "screenName");
+
+		tracker.setScreenName(screenName);
+
+		// TODO: https://productforums.google.com/forum/#!topic/analytics/278xuhDXv0s
+		HitBuilders.AppViewBuilder hitBuilder = new HitBuilders.AppViewBuilder();
+
 		// custom dimension
 		Object cd = propsDict.get("customDimension");
 		if (cd instanceof HashMap) {
@@ -208,28 +248,134 @@ public class TrackerProxy extends KrollProxy
 			for (Object key : dict.keySet()) {
 				int idx = TiConvert.toInt(key);
 				String val = TiConvert.toString(dict.get(key));
-				
+
 				if (idx > 0) {
 					hitBuilder.setCustomDimension(idx, val);
 				}
 			}
 		}
-		
+
 		// custom metric
 		Object cm = propsDict.get("customMetric");
 		if (cm instanceof HashMap) {
 			HashMap dict = (HashMap) cm;
-			
+
 			for (Object key : dict.keySet()) {
 				int idx = TiConvert.toInt(key);
 				float val = TiConvert.toFloat(dict.get(key));
-				
+
 				if (idx > 0) {
 					hitBuilder.setCustomMetric(idx, val);
 				}
 			}
 		}
-		
+
 		tracker.send(hitBuilder.build());
 	}
+
+	// https://developers.google.com/analytics/devguides/collection/android/v4/ecommerce
+	@Kroll.method
+	public void trackTransaction(HashMap props) {
+		KrollDict propsDict = new KrollDict(props);
+
+		String transactionId = TiConvert.toString(propsDict, "transactionId");
+		String affiliation = TiConvert.toString(propsDict, "affiliation");
+		Double revenue = TiConvert.toDouble(propsDict, "revenue");
+		Double tax = TiConvert.toDouble(propsDict, "tax");
+		Double shipping = TiConvert.toDouble(propsDict, "shipping");
+		String currency = TiConvert.toString(propsDict, "currency");
+
+		// TODO:
+		// https://productforums.google.com/forum/#!topic/analytics/278xuhDXv0s
+		HitBuilders.TransactionBuilder hitBuilder = new HitBuilders.TransactionBuilder()
+				.setTransactionId(transactionId).setAffiliation(affiliation)
+				.setRevenue(revenue).setTax(tax).setShipping(shipping)
+				.setCurrencyCode(currency);
+
+		// custom dimension
+		Object cd = propsDict.get("customDimension");
+		if (cd instanceof HashMap) {
+			HashMap dict = (HashMap) cd;
+			for (Object key : dict.keySet()) {
+				int idx = TiConvert.toInt(key);
+				String val = TiConvert.toString(dict.get(key));
+
+				if (idx > 0) {
+					hitBuilder.setCustomDimension(idx, val);
+				}
+			}
+		}
+
+		// custom metric
+		Object cm = propsDict.get("customMetric");
+		if (cm instanceof HashMap) {
+			HashMap dict = (HashMap) cm;
+
+			for (Object key : dict.keySet()) {
+				int idx = TiConvert.toInt(key);
+				float val = TiConvert.toFloat(dict.get(key));
+
+				if (idx > 0) {
+					hitBuilder.setCustomMetric(idx, val);
+				}
+			}
+		}
+
+		tracker.send(hitBuilder.build());
+	}
+
+
+	// https://developers.google.com/analytics/devguides/collection/android/v4/ecommerce
+	@Kroll.method
+	public void trackTransactionItem(HashMap props) {
+		KrollDict propsDict = new KrollDict(props);
+
+		String transactionId = TiConvert.toString(propsDict, "transactionId");
+		String name = TiConvert.toString(propsDict, "name");
+		String sku = TiConvert.toString(propsDict, "sku");
+		String category = TiConvert.toString(propsDict, "category");
+		Double price = TiConvert.toDouble(propsDict, "price");
+		Double quantity = TiConvert.toDouble(propsDict, "quantity");
+		String currency = TiConvert.toString(propsDict, "currency");
+
+		// TODO:
+		// https://productforums.google.com/forum/#!topic/analytics/278xuhDXv0s
+		HitBuilders.ItemBuilder hitBuilder = new HitBuilders.ItemBuilder()
+				.setTransactionId(transactionId).setName(name).setSku(sku)
+				.setCategory(category).setPrice(price)
+				.setQuantity(Math.round(quantity))
+				.setCurrencyCode(currency);
+
+		// custom dimension
+		Object cd = propsDict.get("customDimension");
+		if (cd instanceof HashMap) {
+			HashMap dict = (HashMap) cd;
+			for (Object key : dict.keySet()) {
+				int idx = TiConvert.toInt(key);
+				String val = TiConvert.toString(dict.get(key));
+
+				if (idx > 0) {
+					hitBuilder.setCustomDimension(idx, val);
+				}
+			}
+		}
+
+		// custom metric
+		Object cm = propsDict.get("customMetric");
+		if (cm instanceof HashMap) {
+			HashMap dict = (HashMap) cm;
+
+			for (Object key : dict.keySet()) {
+				int idx = TiConvert.toInt(key);
+				float val = TiConvert.toFloat(dict.get(key));
+
+				if (idx > 0) {
+					hitBuilder.setCustomMetric(idx, val);
+				}
+			}
+		}
+
+		tracker.send(hitBuilder.build());
+	}
+
 }

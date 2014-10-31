@@ -62,10 +62,12 @@
 
     [tracker set:@"&uid"
            value:userId];
-    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:category
-                                                          action:action
-                                                           label:nil
-                                                           value:nil] build]];
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:category
+                                                                           action:action
+                                                                            label:nil
+                                                                            value:nil];
+    [self handleCustomFields:builder jshash:args];
+    [tracker send:[builder build]];
 }
 
 
@@ -85,11 +87,12 @@
     ENSURE_ARG_OR_NIL_FOR_KEY(label, args, @"label", NSString);
     ENSURE_ARG_OR_NIL_FOR_KEY(value, args, @"value", NSNumber);
 
-
-    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:category
-                                                        action:action
-                                                        label:label
-                                                        value:value] build]];
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:category
+                                                                           action:action
+                                                                            label:label
+                                                                            value:value];
+    [self handleCustomFields:builder jshash:args];
+    [tracker send:[builder build]];
 }
 
 // https://developers.google.com/analytics/devguides/collection/ios/v3/social
@@ -105,10 +108,11 @@
     ENSURE_ARG_FOR_KEY(network, args, @"network", NSString);
     ENSURE_ARG_FOR_KEY(action, args, @"action", NSString);
     ENSURE_ARG_OR_NIL_FOR_KEY(target, args, @"target", NSString);
-
-    [tracker send:[[GAIDictionaryBuilder createSocialWithNetwork:network
-                                                         action:action
-                                                         target:target] build]];
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createSocialWithNetwork:network
+                                                                           action:action
+                                                                           target:target];
+    [self handleCustomFields:builder jshash:args];
+    [tracker send:[builder build]];
 
 
 }
@@ -129,23 +133,31 @@
     ENSURE_ARG_OR_NIL_FOR_KEY(label, args, @"label", NSString);
     ENSURE_ARG_FOR_KEY(time, args, @"time", NSNumber);
 
-    [tracker send:[[GAIDictionaryBuilder createTimingWithCategory:category
-                                                         interval:time
-                                                             name:name
-                                                            label:label] build]];
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createTimingWithCategory:category
+                                                                          interval:time
+                                                                              name:name
+                                                                             label:label];
+    [self handleCustomFields:builder jshash:args];
+    [tracker send:[builder build]];
 }
 
 // https://developers.google.com/analytics/devguides/collection/ios/v3/screens
--(void)trackScreen:(id)value
+-(void)trackScreen:(id)args
 {
-    ENSURE_UI_THREAD_1_ARG(value);
-    ENSURE_SINGLE_ARG(value, NSString);
+    ENSURE_UI_THREAD_1_ARG(args);
+    ENSURE_SINGLE_ARG(args, NSDictionary);
+
+    NSString *screenName;
+
+    ENSURE_ARG_FOR_KEY(screenName, args, @"screeName", NSString);
 
     // This screen name value will remain set on the tracker and sent with
     // hits until it is set to a new value or to nil.
-    [tracker set:kGAIScreenName value:value];
+    [tracker set:kGAIScreenName value:screenName];
 
-    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createScreenView];
+    [self handleCustomFields:builder jshash:args];
+    [tracker send:[builder build]];
 }
 
 // https://developers.google.com/analytics/devguides/collection/ios/v3/ecommerce
@@ -169,12 +181,14 @@
     ENSURE_ARG_FOR_KEY(shipping, args, @"shipping", NSNumber);
     ENSURE_ARG_FOR_KEY(currency, args, @"currency", NSString);
 
-    [tracker send:[[GAIDictionaryBuilder createTransactionWithId:transactionId
-                                                     affiliation:affiliation
-                                                         revenue:revenue
-                                                             tax:tax
-                                                        shipping:shipping
-                                                    currencyCode:currency] build]];
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createTransactionWithId:transactionId
+                                                                      affiliation:affiliation
+                                                                          revenue:revenue
+                                                                              tax:tax
+                                                                         shipping:shipping
+                                                                     currencyCode:currency];
+    [self handleCustomFields:builder jshash:args];
+    [tracker send:[builder build]];
 }
 
 // https://developers.google.com/analytics/devguides/collection/ios/v3/ecommerce
@@ -200,68 +214,68 @@
     ENSURE_ARG_FOR_KEY(quantity, args, @"quantity", NSNumber);
     ENSURE_ARG_FOR_KEY(currency, args, @"currency", NSString);
 
-    [tracker send:[[GAIDictionaryBuilder createItemWithTransactionId:transactionId
-                                                                name:name
-                                                                 sku:sku
-                                                            category:category
-                                                               price:price
-                                                            quantity:quantity
-                                                        currencyCode:currency] build]];
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createItemWithTransactionId:transactionId
+                                                                                 name:name
+                                                                                  sku:sku
+                                                                             category:category
+                                                                                price:price
+                                                                             quantity:quantity
+                                                                         currencyCode:currency];
+    [self handleCustomFields:builder jshash:args];
+    [tracker send:[builder build]];
 }
 
-//// https://developers.google.com/analytics/devguides/collection/ios/v3/advanced
-//-(void)send:(id)args
-//{
-//    ENSURE_UI_THREAD_1_ARG(args);
-//    ENSURE_SINGLE_ARG(args, NSDictionary);
-//
-//    NSString *trackType;
-//    NSDictionary *parameters;
-//
-//    ENSURE_ARG_FOR_KEY(trackType, args, @"trackType", NSString);
-//    ENSURE_ARG_FOR_KEY(parameters, args, @"parameters", NSDictionary);
-//
-//    [tracker send:trackType params:parameters];
-//}
-//
-//-(void)close
-//{
-//    ENSURE_UI_THREAD_0_ARGS;
-//    [tracker close];
-//}
+
 
 -(id)trackingId
 {
     return trackingId;
 }
 
-//-(void)setAnonymize:(id)value
-//{
-//    ENSURE_UI_THREAD_1_ARG(value);
-//    ENSURE_SINGLE_ARG(value, NSNumber);
-//
-//    tracker.anonymize = [value boolValue];
-//}
-//
-//-(void)setUseHttps:(id)value
-//{
-//    ENSURE_UI_THREAD_1_ARG(value);
-//    ENSURE_SINGLE_ARG(value, NSNumber);
-//
-//    tracker.useHttps = [value boolValue];
-//}
-//
-//-(void)setSampleRate:(id)value
-//{
-//    ENSURE_UI_THREAD_1_ARG(value);
-//    ENSURE_SINGLE_ARG(value, NSNumber);
-//
-//    tracker.sampleRate = [value doubleValue];
-//}
+
 
 -(id<GAITracker>)tracker
 {
     return tracker;
 }
+
+
+// Common way to deal with adding customDimension and customMetric fields
+-(void) handleCustomFields:(GAIDictionaryBuilder*) builder jshash:(id)args
+{
+    NSDictionary *customDimension;
+    ENSURE_ARG_OR_NIL_FOR_KEY(customDimension, args, @"customDimension", NSDictionary);
+    if ([customDimension count]) {
+        NSString *key;
+        NSString *val;
+        NSNumber *idx;
+        for(key in customDimension) {
+            val = [customDimension objectForKey: key];
+            ENSURE_TYPE(val, NSString);
+            idx = [key integerValue];
+            if (idx > 0) {
+                [builder setValue:val forKey:[GAIFields customDimensionForIndex:idx]];
+            }
+        }
+    }
+
+    NSDictionary *customMetric;
+    ENSURE_ARG_OR_NIL_FOR_KEY(customMetric, args, @"customMetric", NSDictionary);
+    if ([customMetric count]) {
+        NSString *key;
+        NSString *val;
+        NSNumber *idx;
+        for(key in customMetric) {
+            val = [customMetric objectForKey: key];
+            ENSURE_TYPE(val, NSString);
+            idx = [key integerValue];
+            if (idx > 0) {
+                [builder setValue:val forKey:[GAIFields customMetricForIndex:idx]];
+            }
+        }
+    }
+
+}
+
 
 @end

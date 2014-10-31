@@ -10,7 +10,7 @@
 
 @interface AnalyticsGoogleModule : TiModule {
     BOOL optOut;
-    BOOL debug;
+    BOOL dryRun;
     NSTimeInterval dispatchInterval;
 }
 
