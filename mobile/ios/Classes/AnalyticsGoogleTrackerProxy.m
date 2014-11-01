@@ -82,8 +82,8 @@
     NSString *label;
     NSNumber *value;
 
-    ENSURE_ARG_OR_NIL_FOR_KEY(category, args, @"category", NSString);
-    ENSURE_ARG_OR_NIL_FOR_KEY(action, args, @"action", NSString);
+    ENSURE_ARG_FOR_KEY(category, args, @"category", NSString);
+    ENSURE_ARG_FOR_KEY(action, args, @"action", NSString);
     ENSURE_ARG_OR_NIL_FOR_KEY(label, args, @"label", NSString);
     ENSURE_ARG_OR_NIL_FOR_KEY(value, args, @"value", NSNumber);
 
@@ -179,7 +179,7 @@
     ENSURE_ARG_FOR_KEY(revenue, args, @"revenue", NSNumber);
     ENSURE_ARG_FOR_KEY(tax, args, @"tax", NSNumber);
     ENSURE_ARG_FOR_KEY(shipping, args, @"shipping", NSNumber);
-    ENSURE_ARG_FOR_KEY(currency, args, @"currency", NSString);
+    ENSURE_ARG_OR_NIL_FOR_KEY(currency, args, @"currency", NSString);
 
     GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createTransactionWithId:transactionId
                                                                       affiliation:affiliation
