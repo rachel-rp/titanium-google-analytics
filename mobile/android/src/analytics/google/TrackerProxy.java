@@ -92,15 +92,16 @@ public class TrackerProxy extends KrollProxy
 		String category = TiConvert.toString(propsDict, "category");
 		String action = TiConvert.toString(propsDict, "action");
 		String label = TiConvert.toString(propsDict, "label");
-		long value = TiConvert.toInt(propsDict, "value");
 
 		// TODO: https://productforums.google.com/forum/#!topic/analytics/278xuhDXv0s
 		HitBuilders.EventBuilder hitBuilder = new HitBuilders.EventBuilder()
-			.setCategory(category)
-			.setAction(action)
-			.setLabel(label)
-			.setValue(value);
+				.setCategory(category).setAction(action).setLabel(label);
 
+		Object vo = propsDict.get("value");
+		if (vo != null) {
+			long value = TiConvert.toInt(propsDict, "value");
+			hitBuilder.setValue(value);
+		}
 
 		// custom dimension
 		Object cd = propsDict.get("customDimension");
