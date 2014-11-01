@@ -1,10 +1,7 @@
-function doClick(e) {
-    alert($.label.text);
-}
-
-$.index.open();
-
-
+var win = Ti.UI.createWindow({
+	backgroundColor:'white'
+});
+win.open();
 
 var GA = require('analytics.google');
 
