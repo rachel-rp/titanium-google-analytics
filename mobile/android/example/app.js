@@ -13,7 +13,7 @@ GA.dryRun = true;
 // Data collected using the Google Analytics SDK for Android is stored locally before being
 // dispatched on a separate thread to Google Analytics.
 // By default, data is dispatched from the Google Analytics SDK for Android every 30 minutes.
-GA.dispatchInterval = 15; // minutes
+GA.dispatchInterval = 15; // seconds
 
 
 var tracker = GA.getTracker("UA-XXXXXX-X");
