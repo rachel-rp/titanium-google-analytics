@@ -230,6 +230,10 @@ tracker.trackSocial({
 
 As per the Google Analytics API, custom metrics and dimensions are 1-based. Each property is expected to be defined by a string representation of the numeric index with its corresponding value. Metric values are expected to be numeric and Dimension values are expected to be strings.
 
+## Google Play Services
+
+Version 2.1.0 of the android module uses Google Play Services Version 6.1 (rev 21 - 6171000).
+
 ## Authors
 
 * [Matt Tuttle](https://github.com/MattTuttle "Matt Tuttle")
