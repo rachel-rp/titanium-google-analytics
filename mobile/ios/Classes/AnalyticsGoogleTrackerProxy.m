@@ -212,7 +212,7 @@
     ENSURE_ARG_OR_NIL_FOR_KEY(category, args, @"category", NSString);
     ENSURE_ARG_FOR_KEY(price, args, @"price", NSNumber);
     ENSURE_ARG_FOR_KEY(quantity, args, @"quantity", NSNumber);
-    ENSURE_ARG_FOR_KEY(currency, args, @"currency", NSString);
+    ENSURE_ARG_OR_NIL_FOR_KEY(currency, args, @"currency", NSString);
 
     GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createItemWithTransactionId:transactionId
                                                                                  name:name
