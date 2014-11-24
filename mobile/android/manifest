@@ -3,7 +3,7 @@
 # during compilation, packaging, distribution, etc.
 #
 version: 2.1.0
-apiversion: 3
+apiversion: 2
 description: Google Analytics for Android v4
 author: Matt Tuttle
 license: MIT
