@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Android-2.2.0 - iOS-2.1.0 <> 2014-12-13
+### Fixed
+- Changed moduleid so that new users of the module will not receive unlicensed module if they haven't downloaded the legacy version through the Titanium Marketplace.
 
 ## Android-2.1.1 - iOS-2.0-1 <> 2014-11-03
 ### Added
@@ -45,4 +48,3 @@ All notable changes to this project will be documented in this file.
 
 ## Prior Versions
 - Prior versions were the responsibility of [MattTuttle](https://github.com/MattTuttle/titanium-google-analytics)
-
