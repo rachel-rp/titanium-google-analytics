@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Android-3.0.0 - iOS-3.0.0 <>
+### Added
+- The module now depends on Titanium 3.5.0.GA
+- 64bit capability for iOS. If you are updating your application from a lower version than 3.5.0.GA and you are having compiling issues, try removing the files in the `build` and `Resources` folders.
+
 ## Android-2.2.0 - iOS-2.1.0 <> 2014-12-13
 ### Fixed
 - Changed moduleid so that new users of the module will not receive unlicensed module if they haven't downloaded the legacy version through the Titanium Marketplace.
