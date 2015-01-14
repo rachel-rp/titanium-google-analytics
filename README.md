@@ -2,6 +2,10 @@
 
 Connects to Google Analytics for app event tracking in a Titanium Appcelerator Application. The 2.x release of this module is targeted for the [Google Analytics SDK for iOS v3](https://developers.google.com/analytics/devguides/collection/ios/v3/) and [Google Analytics SDK v4 for Android](https://developers.google.com/analytics/devguides/collection/android/v4/).
 
+## 64bit Capability
+
+Version 3.0.0 of this module depends on version 3.5.0.GA (or greater) of the titanium SDK, which provides 64bit support on the iOS platform. If you are upgrading your application to use this new version and you are experiencing build problems, try clearing out your `build` and `Resources` folders and then recompile.
+
 ## Set up Google Analytics
 
 First step: you have to create a new app property in your Google Analytics-account. Refer to [this page](http://support.google.com/analytics/bin/answer.py?hl=en&answer=2587086&topic=2587085&ctx=topic) for more information.
