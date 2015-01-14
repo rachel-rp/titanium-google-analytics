@@ -99,7 +99,7 @@ Tracks an event taking the following parameters:
 | category | String | The event category | Yes |
 | action   | String | The event action | Yes |
 | label    | String | The event label | No |
-| value    | String | The event value | No |
+| value    | Integer | The event value | No |
 
 ```javascript
 tracker.trackEvent({
