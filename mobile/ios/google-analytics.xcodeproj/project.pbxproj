@@ -63,7 +63,6 @@
 		24DD6D1B1134B66800162E58 /* titanium.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = titanium.xcconfig; sourceTree = "<group>"; };
 		24DE9E0F11C5FE74003F90F6 /* AnalyticsGoogleModuleAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsGoogleModuleAssets.h; path = Classes/AnalyticsGoogleModuleAssets.h; sourceTree = "<group>"; };
 		24DE9E1011C5FE74003F90F6 /* AnalyticsGoogleModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsGoogleModuleAssets.m; path = Classes/AnalyticsGoogleModuleAssets.m; sourceTree = "<group>"; };
-		2799B01E1A69996D00D323F7 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		279CB3781A03D38300ADA980 /* Changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Changelog.txt; sourceTree = "<group>"; };
 		279CB3A41A03D38300ADA980 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		279CB3A51A03D38300ADA980 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
@@ -81,7 +80,6 @@
 		279CB3F21A03D38300ADA980 /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
 		279CB4281A03D3C400ADA980 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		279CB42A1A03D3CE00ADA980 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		279CB4871A040BE800ADA980 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		279CB4891A040CB200ADA980 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		279CB48C1A040D7B00ADA980 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		2A54E9F616446CF10011E04D /* AnalyticsGoogleTrackerProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsGoogleTrackerProxy.h; path = Classes/AnalyticsGoogleTrackerProxy.h; sourceTree = "<group>"; };
@@ -130,10 +128,8 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2799B01E1A69996D00D323F7 /* iAd.framework */,
 				279CB48C1A040D7B00ADA980 /* libsqlite3.0.dylib */,
 				279CB4891A040CB200ADA980 /* SystemConfiguration.framework */,
-				279CB4871A040BE800ADA980 /* AdSupport.framework */,
 				279CB42A1A03D3CE00ADA980 /* libz.dylib */,
 				279CB4281A03D3C400ADA980 /* CoreData.framework */,
 				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
