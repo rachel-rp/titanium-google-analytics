@@ -1,0 +1,13 @@
+{
+	"global": {
+    "trackingId": "UA-56305401-1"
+  },
+	"env:development": {},
+	"env:test": {},
+	"env:production": {},
+	"os:android": {},
+	"os:blackberry": {},
+	"os:ios": {},
+	"os:mobileweb": {},
+	"dependencies": {}
+}
