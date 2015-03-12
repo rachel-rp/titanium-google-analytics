@@ -178,7 +178,7 @@ Tracks an exception, for example a login error or network timeout.
 tracker.trackException({
   description: "Facebook login error"
 });
-
+```
 
 ### Tracker.trackTransaction(params)
 
