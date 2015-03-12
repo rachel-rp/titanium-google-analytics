@@ -14,8 +14,12 @@ import org.appcelerator.kroll.common.TiConfig;
 import org.appcelerator.titanium.TiApplication;
 
 import android.app.Activity;
+import android.util.Log;
 
+import com.google.android.gms.analytics.ExceptionParser;
+import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 @Kroll.module(name="GoogleAnalytics", id="analytics.google")
 public class GoogleAnalyticsModule extends KrollModule
@@ -26,6 +30,7 @@ public class GoogleAnalyticsModule extends KrollModule
 	private static final boolean DBG = TiConfig.LOGD;
 
 	private final GoogleAnalytics mInstance;
+	private Tracker tracker;
 
 	// You can define constants with @Kroll.constant, for example:
 	// @Kroll.constant public static final String EXTERNAL_NAME = value;
@@ -49,7 +54,8 @@ public class GoogleAnalyticsModule extends KrollModule
 	@Kroll.method
 	public TrackerProxy getTracker(String trackingID)
 	{
-		return new TrackerProxy(mInstance.newTracker(trackingID));
+		tracker = mInstance.newTracker(trackingID);
+		return new TrackerProxy(tracker);
 	}
 
 	@Kroll.setProperty
@@ -72,8 +78,19 @@ public class GoogleAnalyticsModule extends KrollModule
 
 	@Kroll.setProperty
 	public void setTrackUncaughtExceptions(boolean track) {
-		// do nothing - ios only, but this is here so platform handling
-		// is not necessary
+		if (track && tracker != null) {
+			ExceptionReporter reporter = new ExceptionReporter(tracker, Thread.getDefaultUncaughtExceptionHandler(), TiApplication.getInstance().getCurrentActivity());
+		       reporter.setExceptionParser(new ExceptionParser()
+		        {
+		            @Override
+		            public String getDescription(String thread, Throwable throwable)
+		            {
+		                return String.format("Thread: %s, Exception: %s", thread, Log.getStackTraceString(throwable));
+		            }
+		        });
+
+		        Thread.setDefaultUncaughtExceptionHandler(reporter);
+		}
 	}
 
 }

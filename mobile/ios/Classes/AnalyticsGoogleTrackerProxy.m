@@ -225,7 +225,18 @@
     [tracker send:[builder build]];
 }
 
+-(void)trackException:(id)args
+{
+    ENSURE_UI_THREAD_1_ARG(args);
+    ENSURE_SINGLE_ARG(args, NSDictionary);
 
+    NSString *description;
+
+    ENSURE_ARG_FOR_KEY(description, args, @"description", NSString);
+
+    [tracker send:[[GAIDictionaryBuilder
+        createExceptionWithDescription: description  withFatal: NO] build]];
+}
 
 -(id)trackingId
 {
