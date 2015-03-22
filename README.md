@@ -38,6 +38,20 @@ tracker.trackEvent({
 });
 ```
 
+It has been suggested to store the tracker object on `Alloy.Globals` for convenience. For example:
+
+```javascript
+// In Alloy.js
+var GA = require("analytics.google");
+Alloy.Globals.tracker = GA.getTracker(Alloy.CFG.googleAnalyticsId);
+
+// Now in any controller, you can use the API as outlined in the documentation.
+Alloy.Globals.tracker.trackEvent({
+  category: "Loading",
+  action: "cancelled"
+});
+```
+
 ## Reference
 
 ### Module.trackUncaughtExceptions
