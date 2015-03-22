@@ -182,3 +182,19 @@ tracker.trackTransactionItem({
     "1": 68.3
   }
 });
+
+
+// Exceptions
+tracker.trackException({
+  description: "Facebook login error",
+  fatal: false
+});
+tracker.trackException({
+  description: "Fatal error",
+  fatal: true
+});
+tracker.trackException({
+  fatal: true
+});
+// should produce a non-fatal, excepction without description
+tracker.trackException({});

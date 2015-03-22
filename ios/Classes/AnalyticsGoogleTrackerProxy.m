@@ -231,11 +231,15 @@
     ENSURE_SINGLE_ARG(args, NSDictionary);
 
     NSString *description;
+    NSString *fatalStr;
+    BOOL fatal;
 
-    ENSURE_ARG_FOR_KEY(description, args, @"description", NSString);
+    ENSURE_ARG_OR_NIL_FOR_KEY(fatalStr, args, @"fatalStr", NSString);
+    fatal = [TiUtils boolValue:fatalStr def:NO];
+    ENSURE_ARG_OR_NIL_FOR_KEY(description, args, @"description", NSString);
 
     [tracker send:[[GAIDictionaryBuilder
-        createExceptionWithDescription: description  withFatal: NO] build]];
+        createExceptionWithDescription: description  withFatal: fatal] build]];
 }
 
 -(id)trackingId

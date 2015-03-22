@@ -10,6 +10,15 @@ Version 3.0.0 of this module depends on version 3.5.0.GA (or greater) of the tit
 
 First step: you have to create a new app property in your Google Analytics-account. Refer to [this page](http://support.google.com/analytics/bin/answer.py?hl=en&answer=2587086&topic=2587085&ctx=topic) for more information.
 
+## Google Play Services
+
+If you find that you are experiencing errors related to Google Play Services, then you should do two things:
+
+1. Ensure the device you are using has Google Play installed.
+
+2. Ensure your local sdk has the Google Play libraries installed. It is best if the library is at least version 21.
+
+If you have checked both and you are still experiencing errors, then you can try uninstalling your local Google Play library and re-installing it.
 
 ## Usage
 
@@ -33,14 +42,11 @@ tracker.trackEvent({
 
 ### Module.trackUncaughtExceptions
 
-Set this property on the module to true when you want to enable uncaught exception tracking (crashes).
-Note this will not catch crashes on the Javascript thread (i.e. the Titanium "Red Screen of Death"), but
-should catch the exceptions on the "native" threads. In Android, we must initialize a tracker prior to setting this.
-If more than a single Tracker is used in the app, the last one to be set is the one that will track the uncaught exceptions.
+Set this property on the module to true when you want to enable uncaught exception tracking (crashes). Note this will not catch crashes on the Javascript thread (i.e. the Titanium "Red Screen of Death"), but should catch the exceptions on the native threads. In Android, we must initialize a tracker prior to setting this. If more than a single Tracker is used in the app, the last one set is the one that will track the uncaught exceptions.
 
 ```javascript
 var GA = require("analytics.google");
-var tracker = GA.getTracker("UA-XXXXXXX-X"); // Android: Must be called prior to setting trackUncaughtExceptions 
+var tracker = GA.getTracker("UA-XXXXXXX-X"); // Android: Must be called prior to setting trackUncaughtExceptions
 GA.trackUncaughtExceptions = true;
 ```
 
@@ -172,11 +178,13 @@ Tracks an exception, for example a login error or network timeout.
 
 | Property | Type   | Description | Required |
 | -------- |:------:| ----------- |:--------:|
-| description | String | A string you wish to log to GA | Yes |
+| description | String | A string you wish to log to GA (up to 100 characters) | No |
+| fatal | Boolean | True if fatal exception, false otherwise. | Yes |
 
 ```javascript
 tracker.trackException({
-  description: "Facebook login error"
+	description: "Facebook login error",
+	fatal: false
 });
 ```
 
@@ -256,10 +264,12 @@ As per the Google Analytics API, custom metrics and dimensions are 1-based. Each
 
 Version 2.1.0 of the android module uses Google Play Services Version 6.1 (rev 21 - 6171000).
 
-## Authors
+## Contributors
 
-* [Matt Tuttle](https://github.com/MattTuttle "Matt Tuttle")
+* [Nick DiZazzo](https://github.com/ndizazzo "Nick DiZazzo")
+* [Mark Mokryn](https://github.com/mokesmokes "Mark Mokryn")
 * [Adam St. John](https://github.com/astjohn "Adam St. John")
+* [Matt Tuttle](https://github.com/MattTuttle "Matt Tuttle")
 
 ## License
 

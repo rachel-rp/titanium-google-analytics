@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Android-3.1.0 - iOS-3.1.0 <> 2015-03-22
+### Added
+- `trackException` method added to Android and iOS to track caught exceptions. [[mokesmokes]](https://github.com/mokesmokes)
+- `GA.trackUncaughtExceptions` method added to Android to track uncaught exceptions. [[mokesmokes]](https://github.com/mokesmokes)
+- Added note to README about common Google Play Services issues.
+
+### Fixed
+- Restructured github repo and android module to avoid case-sensitivity issues and unable to find android module error.
+- Regression on minimum Titanium SDK requirement for android. [[mokesmokes]](https://github.com/mokesmokes)
+
 ## Android-3.0.0 - iOS-3.0.2 <> 2015-01-16
 ### Added
 - Update iOS module to use SDK 3.10. IDFA warning in logs is no longer present.

@@ -9,6 +9,7 @@
 #import "GAI.h"
 #import "GAIDictionaryBuilder.h"
 #import "GAIFields.h"
+#import "TiUtils.h"
 
 @interface AnalyticsGoogleTrackerProxy : TiProxy {
     id<GAITracker> tracker;

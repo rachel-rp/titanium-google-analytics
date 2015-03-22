@@ -375,17 +375,25 @@ public class TrackerProxy extends KrollProxy
 
     tracker.send(hitBuilder.build());
   }
-  
+
+
   @Kroll.method
   public void trackException(HashMap props) {
-  	KrollDict propsDict = new KrollDict(props);
-  	String description = TiConvert.toString(propsDict, "description");
-  
-  	tracker.send(new HitBuilders.ExceptionBuilder()
-  		.setDescription(description)
-  		.setFatal(false)
-  		.build());
+    KrollDict propsDict = new KrollDict(props);
+    String description = TiConvert.toString(propsDict, "description");
+    Boolean fatal;
+    
+    if (propsDict.containsKey("fatal")) {
+    	fatal = TiConvert.toBoolean(propsDict, "fatal");
+    } else {
+    	fatal = false;
+    }
+
+    tracker.send(new HitBuilders.ExceptionBuilder()
+      .setDescription(description)
+      .setFatal(fatal)
+      .build());
   }
-  
+
 
 }

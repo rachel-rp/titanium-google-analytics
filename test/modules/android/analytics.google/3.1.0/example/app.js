@@ -195,5 +195,4 @@ tracker.trackException({
 tracker.trackException({
 	fatal: true
 });
-// should produce a non-fatal, excepction without description
-tracker.trackException({});
+tracker.trackException();
