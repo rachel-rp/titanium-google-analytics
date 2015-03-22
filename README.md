@@ -33,11 +33,15 @@ tracker.trackEvent({
 
 ### Module.trackUncaughtExceptions
 
-Set this property on the module to true when you want to enable exception tracking. iOS only.
+Set this property on the module to true when you want to enable uncaught exception tracking (crashes).
+Note this will not catch crashes on the Javascript thread (i.e. the Titanium "Red Screen of Death"), but
+should catch the exceptions on the "native" threads. In Android, we must initialize a tracker prior to setting this.
+If more than a single Tracker is used in the app, the last one to be set is the one that will track the uncaught exceptions.
 
 ```javascript
 var GA = require("analytics.google");
-GA.trackUncaughtExceptions = true; // ios only
+var tracker = GA.getTracker("UA-XXXXXXX-X"); // Android: Must be called prior to setting trackUncaughtExceptions 
+GA.trackUncaughtExceptions = true;
 ```
 
 ### Module.optOut
@@ -159,6 +163,20 @@ Tracks a screen change using the screen's name.
 ```javascript
 tracker.trackScreen({
 	screenName: "Home Screen"
+});
+```
+
+### Tracker.trackException(params)
+
+Tracks an exception, for example a login error or network timeout.
+
+| Property | Type   | Description | Required |
+| -------- |:------:| ----------- |:--------:|
+| description | String | A string you wish to log to GA | Yes |
+
+```javascript
+tracker.trackException({
+  description: "Facebook login error"
 });
 ```
 
