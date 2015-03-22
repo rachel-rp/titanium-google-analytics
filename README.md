@@ -24,8 +24,8 @@ The GA variable is a reference to the Module object. To interact with the tracke
 ```javascript
 var tracker = GA.getTracker("UA-1234567-8");
 tracker.trackEvent({
-  category: "Loading",
-  action: "cancelled"
+	category: "Loading",
+	action: "cancelled"
 });
 ```
 
@@ -84,9 +84,9 @@ Tracks a user sign in with an 'anonymous' identifier. You will be breaking Googl
 
 ```javascript
 tracker.setUser({
-  userId: "123456",
-  category: "UX",
-  action: "User Sign In"
+	userId: "123456",
+	category: "UX",
+	action: "User Sign In"
 });
 ```
 
@@ -103,10 +103,10 @@ Tracks an event taking the following parameters:
 
 ```javascript
 tracker.trackEvent({
-  category: "category",
-  action: "test",
-  label: "label",
-  value: 1
+	category: "category",
+	action: "test",
+	label: "label",
+	value: 1
 });
 ```
 
@@ -122,9 +122,9 @@ Tracks social interactions taking the following parameters:
 
 ```javascript
 tracker.trackSocial({
-  network: "facebook",
-  action: "action",
-  target: "target"
+	network: "facebook",
+	action: "action",
+	target: "target"
 });
 ```
 
@@ -141,10 +141,10 @@ Tracks a timing taking the following parameters:
 
 ```javascript
 tracker.trackTiming({
-  category: "Loading",
-  time: 150,
-  name: "",
-  label: ""
+	category: "Loading",
+	time: 150,
+	name: "",
+	label: ""
 });
 ```
 
@@ -158,7 +158,7 @@ Tracks a screen change using the screen's name.
 
 ```javascript
 tracker.trackScreen({
-  screenName: "Home Screen"
+	screenName: "Home Screen"
 });
 ```
 
@@ -177,12 +177,12 @@ Tracks an ecommerce transaction.
 
 ```javascript
 tracker.trackTransaction({
-  transactionId: "123456",
-  affiliation: "Store",
-  revenue: 24.99 * 0.7,
-  tax: 0.6,
-  shipping: 0,
-  currency: "CAD"
+	transactionId: "123456",
+	affiliation: "Store",
+	revenue: 24.99 * 0.7,
+	tax: 0.6,
+	shipping: 0,
+	currency: "CAD"
 });
 ```
 
@@ -202,13 +202,13 @@ Tracks an ecommerce transaction's item.
 
 ```javascript
 tracker.trackTransactionItem({
-  transactionId: "123456",
-  name: "My Alphabet Book",
-  sku: "ABC123",
-  category: "product category",
-  price: 24.99,
-  quantity: 1,
-  currency: "CAD"
+	transactionId: "123456",
+	name: "My Alphabet Book",
+	sku: "ABC123",
+	category: "product category",
+	price: 24.99,
+	quantity: 1,
+	currency: "CAD"
 });
 ```
 
@@ -218,17 +218,17 @@ The above method parameters can be extended using customMetric and customDimenti
 
 ```javascript
 tracker.trackSocial({
-  network: "facebook",
-  action: "action",
-  target: "target",
-  customDimension: {
-    "1": "Ottawa",
-    "2": "Toronto"
-  },
-  customMetric: {
-    "1": 45.4,
-    "2": 68.3
-  }
+	network: "facebook",
+	action: "action",
+	target: "target",
+	customDimension: {
+		"1": "Ottawa",
+		"2": "Toronto"
+	},
+	customMetric: {
+		"1": 45.4,
+		"2": 68.3
+	}
 });
 ```
 

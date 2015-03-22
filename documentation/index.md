@@ -1,0 +1,1 @@
+Please refer to README.md at https://github.com/Sitata/titanium-google-analytics.

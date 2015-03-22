@@ -15,3 +15,11 @@ Thumbs.db
 
 # Test app
 #test/
+
+android/example
+android/assets
+android/documentation
+ios/example
+ios/assets
+ios/documentation
+
