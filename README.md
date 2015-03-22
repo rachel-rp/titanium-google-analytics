@@ -193,7 +193,7 @@ Tracks an exception, for example a login error or network timeout.
 | Property | Type   | Description | Required |
 | -------- |:------:| ----------- |:--------:|
 | description | String | A string you wish to log to GA (up to 100 characters) | No |
-| fatal | Boolean | True if fatal exception, false otherwise. | Yes |
+| fatal | Boolean | True if fatal exception, false otherwise. Default value is false. | No |
 
 ```javascript
 tracker.trackException({
