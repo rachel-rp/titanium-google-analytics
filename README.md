@@ -84,11 +84,16 @@ GA.dryRun = true;
 
 ### Module.dispatchInterval
 
-Data collected using the Google Analytics SDK for Android is stored locally before being dispatched on a separate thread to Google Analytics. By default, data is dispatched from the Google Analytics SDK for Android every 30 minutes. By default, data is dispatched from the Google Analytics SDK for iOS every 2 minutes. Set this property if you would like to change the interval in seconds.
+Data collected using the Google Analytics SDK for Android is stored locally before being dispatched on a separate thread to Google Analytics. By default, data is dispatched from the Google Analytics SDK for Android every 30 minutes. By default, data is dispatched from the Google Analytics SDK for iOS every 2 minutes. Set this property if you would like to change the interval in seconds. Note that the iOS SDK requires the value in seconds and the Android SDK requires the value in minutes at the moment.
 
 ```javascript
 var GA = require("analytics.google");
-GA.dispatchInterval = 900; // seconds
+if(Ti.Platform.osname == 'android') {
+    GA.dispatchInterval = 2; // in minutes
+}
+else if(Ti.Platform.name == 'iPhone OS') {
+    GA.dispatchInterval = 120; // in seconds
+}
 ```
 
 
