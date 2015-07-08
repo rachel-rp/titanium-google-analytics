@@ -105,6 +105,11 @@
     return [NSNumber numberWithBool:dryRun];
 }
 
+-(void)dispatch:(id)args
+{
+    [[GAI sharedInstance] dispatch];
+}
+
 -(void)setDryRun:(id)value
 {
     ENSURE_UI_THREAD_1_ARG(value);

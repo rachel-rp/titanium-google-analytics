@@ -59,11 +59,17 @@ public class AnalyticsGoogleModule extends KrollModule
 		tracker = mInstance.newTracker(trackingID);
 		return new TrackerProxy(tracker);
 	}
+    
+    @Kroll.method
+    public void dispatch()
+    {
+        mInstance.dispatchLocalHits();
+    }
 
 	@Kroll.setProperty
 	public void setDispatchInterval(int interval)
 	{
-		mInstance.setLocalDispatchPeriod(interval);
+        mInstance.setLocalDispatchPeriod(interval);
 	}
 
 	@Kroll.setProperty
